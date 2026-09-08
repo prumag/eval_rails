@@ -13,7 +13,7 @@ class GeminiEvaluatorService
     resp_a = generate_single(prompt: prompt, model_config: model_config_a)
     resp_b = generate_single(prompt: prompt, model_config: model_config_b)
 
-    [resp_a, resp_b]
+    [ resp_a, resp_b ]
   end
 
   def self.generate_single(prompt:, model_config:)
@@ -46,7 +46,7 @@ class GeminiEvaluatorService
       contents: [
         {
           parts: [
-            { text: [prompt.system_instruction, prompt.body].compact.join("\n\n") }
+            { text: [ prompt.system_instruction, prompt.body ].compact.join("\n\n") }
           ]
         }
       ],
