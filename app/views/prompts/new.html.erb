@@ -1,0 +1,41 @@
+<div class="hero-banner">
+  <h1 class="hero-title">Submit Evaluation Prompt</h1>
+  <p class="hero-subtitle">
+    Create a new prompt to test and benchmark AI model capabilities across reasoning, code, writing, and data analysis.
+  </p>
+</div>
+
+<div class="glass-card" style="max-width: 720px; margin: 0 auto;">
+  <%= form_with model: @prompt, local: true, id: "new-prompt-form" do |f| %>
+    <% if @prompt.errors.any? %>
+      <div style="background: rgba(244, 63, 94, 0.2); border: 1px solid #f43f5e; color: #fb7185; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+        <h4><%= pluralize(@prompt.errors.count, "error") %> prohibited this prompt from being saved:</h4>
+        <ul>
+          <% @prompt.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div style="margin-bottom: 1.25rem;">
+      <%= f.label :category, "Prompt Category", class: "rating-label" %>
+      <%= f.select :category, Prompt::CATEGORIES, {}, { class: "rating-item", style: "width: 100%; padding: 0.75rem; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--bg-card-border); border-radius: var(--radius-sm); font-size: 1rem;", id: "prompt-category-select" } %>
+    </div>
+
+    <div style="margin-bottom: 1.25rem;">
+      <%= f.label :body, "Prompt Text / Question", class: "rating-label" %>
+      <%= f.text_area :body, rows: 4, placeholder: "Type your question, coding challenge, or creative writing prompt here...", required: true, style: "width: 100%; padding: 0.85rem; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--bg-card-border); border-radius: var(--radius-sm); font-size: 1rem; font-family: var(--font-main);", id: "prompt-body-input" %>
+    </div>
+
+    <div style="margin-bottom: 1.5rem;">
+      <%= f.label :system_instruction, "System Instruction (Optional)", class: "rating-label" %>
+      <%= f.text_area :system_instruction, rows: 2, placeholder: "e.g., 'Act as a senior software architect and provide concise explanations...'", style: "width: 100%; padding: 0.85rem; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--bg-card-border); border-radius: var(--radius-sm); font-size: 0.95rem; font-family: var(--font-main);", id: "prompt-system-instruction-input" %>
+    </div>
+
+    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+      <%= link_to "Cancel", prompts_path, class: "btn-secondary" %>
+      <%= f.submit "Generate Dual Model Responses", class: "btn-primary", id: "btn-submit-new-prompt" %>
+    </div>
+  <% end %>
+</div>

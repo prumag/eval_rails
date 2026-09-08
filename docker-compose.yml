@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - .:/rails
+      - sqlite_data:/rails/db
+    command: ./bin/rails server -b 0.0.0.0
+
+volumes:
+  sqlite_data:

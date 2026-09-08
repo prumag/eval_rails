@@ -1,0 +1,154 @@
+<div class="hero-banner">
+  <h1 class="hero-title">AI Model Evaluation Arena</h1>
+  <p class="hero-subtitle">
+    Compare dual model outputs in a blind test. Rate accuracy, clarity, and instruction adherence to build open AI benchmark evaluations.
+  </p>
+</div>
+
+<!-- Category Filter Pills -->
+<div style="display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+  <%= link_to "All Categories", prompts_path, class: "nav-link #{'active' if @category.blank?}", id: "cat-all" %>
+  <% Prompt::CATEGORIES.each do |cat| %>
+    <%= link_to cat, prompts_path(category: cat), class: "nav-link #{'active' if @category == cat}", id: "cat-#{cat.parameterize}" %>
+  <% end %>
+</div>
+
+<% if @selected_prompt.present? %>
+  <!-- Active Prompt Header -->
+  <div class="glass-card" id="active-prompt-card">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+      <span class="model-tag tag-a"><%= @selected_prompt.category %></span>
+      <span style="font-size: 0.85rem; color: var(--text-dim);">Prompt ID #<%= @selected_prompt.id %></span>
+    </div>
+    
+    <h2 style="font-size: 1.35rem; font-weight: 700; margin-bottom: 0.5rem;" id="prompt-body-text">
+      "<%= @selected_prompt.body %>"
+    </h2>
+
+    <% if @selected_prompt.system_instruction.present? %>
+      <div style="background: rgba(0, 0, 0, 0.3); padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem;">
+        <strong>System Instruction:</strong> <%= @selected_prompt.system_instruction %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Side-by-Side Dual Model Panel -->
+  <div class="arena-grid" id="side-by-side-arena">
+    <!-- Model A -->
+    <div class="model-panel" id="panel-model-a">
+      <div class="model-header">
+        <span class="model-tag tag-a">Model A</span>
+        <span class="execution-time"><%= @response_a&.execution_time_ms %>ms</span>
+      </div>
+      <div class="response-body" id="response-text-a">
+        <%= @response_a&.response_text %>
+      </div>
+    </div>
+
+    <!-- Model B -->
+    <div class="model-panel" id="panel-model-b">
+      <div class="model-header">
+        <span class="model-tag tag-b">Model B</span>
+        <span class="execution-time"><%= @response_b&.execution_time_ms %>ms</span>
+      </div>
+      <div class="response-body" id="response-text-b">
+        <%= @response_b&.response_text %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Evaluation & Rating Form -->
+  <div class="voting-container" id="eval-voting-box">
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Evaluate & Cast Your Vote</h3>
+    <p style="font-size: 0.9rem; color: var(--text-muted);">Which model provided the superior response?</p>
+
+    <%= form_with url: evaluations_path, method: :post, local: true, id: "evaluation-form" do |f| %>
+      <%= f.hidden_field :prompt_id, value: @selected_prompt.id %>
+      <%= f.hidden_field :response_a_id, value: @response_a.id %>
+      <%= f.hidden_field :response_b_id, value: @response_b.id %>
+
+      <div class="vote-options">
+        <label class="vote-btn" id="vote-btn-a">
+          <%= f.radio_button :winner_selection, "response_a", style: "margin-right: 0.5rem;", required: true %>
+          Model A is Better
+        </label>
+
+        <label class="vote-btn" id="vote-btn-tie">
+          <%= f.radio_button :winner_selection, "tie", style: "margin-right: 0.5rem;", required: true %>
+          Both are Equal (Tie)
+        </label>
+
+        <label class="vote-btn" id="vote-btn-b">
+          <%= f.radio_button :winner_selection, "response_b", style: "margin-right: 0.5rem;", required: true %>
+          Model B is Better
+        </label>
+      </div>
+
+      <div class="ratings-group">
+        <div class="rating-item">
+          <label class="rating-label">Factual Accuracy</label>
+          <select name="accuracy_score" id="select-accuracy" required>
+            <option value="5">5 ★★★★★ (Flawless)</option>
+            <option value="4">4 ★★★★☆ (Good)</option>
+            <option value="3">3 ★★★☆☆ (Acceptable)</option>
+            <option value="2">2 ★★☆☆☆ (Flawed)</option>
+            <option value="1">1 ★☆☆☆☆ (Severe Errors)</option>
+          </select>
+        </div>
+
+        <div class="rating-item">
+          <label class="rating-label">Response Clarity</label>
+          <select name="clarity_score" id="select-clarity" required>
+            <option value="5">5 ★★★★★ (Crystal Clear)</option>
+            <option value="4">4 ★★★★☆ (Clear)</option>
+            <option value="3">3 ★★★☆☆ (Moderate)</option>
+            <option value="2">2 ★★☆☆☆ (Confusing)</option>
+            <option value="1">1 ★☆☆☆☆ (Unreadable)</option>
+          </select>
+        </div>
+
+        <div class="rating-item">
+          <label class="rating-label">Instruction Following</label>
+          <select name="instruction_score" id="select-instruction" required>
+            <option value="5">5 ★★★★★ (Followed All Rules)</option>
+            <option value="4">4 ★★★★☆ (Followed Most)</option>
+            <option value="3">3 ★★★☆☆ (Partial Compliance)</option>
+            <option value="2">2 ★★☆☆☆ (Ignored Constraints)</option>
+            <option value="1">1 ★☆☆☆☆ (Did Not Follow)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label class="rating-label">Evaluator Notes / Qualitative Feedback (Optional)</label>
+        <textarea name="feedback_notes" id="feedback-notes-input" rows="3" placeholder="Explain why one model outperformed the other..." style="width: 100%; padding: 0.75rem; background: var(--bg-input); border: 1px solid var(--bg-card-border); color: var(--text-main); border-radius: var(--radius-sm); font-family: var(--font-main);"></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <input type="text" name="evaluator_name" id="evaluator-name-input" placeholder="Your Name / Evaluator Handle (Optional)" style="padding: 0.6rem; background: var(--bg-input); border: 1px solid var(--bg-card-border); color: var(--text-main); border-radius: var(--radius-sm); width: 300px;">
+        <button type="submit" class="btn-primary" id="btn-submit-eval">Submit Evaluation & Reveal Models</button>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="glass-card" style="text-align: center; padding: 3rem;">
+    <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">No Prompts Found in this Category</h3>
+    <%= link_to "Create a New Prompt", new_prompt_path, class: "btn-primary" %>
+  </div>
+<% end %>
+
+<!-- Select Another Prompt List -->
+<div class="glass-card" style="margin-top: 3rem;" id="prompt-picker-list">
+  <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Select Prompt for Evaluation</h3>
+  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+    <% @prompts.each do |prompt| %>
+      <%= link_to prompt_path(prompt), class: "nav-link #{'active' if prompt == @selected_prompt}", style: "display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.25rem; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm);" do %>
+        <div>
+          <span class="model-tag tag-a" style="margin-right: 0.5rem;"><%= prompt.category %></span>
+          <span style="font-weight: 600;"><%= prompt.body.truncate(75) %></span>
+        </div>
+        <span style="font-size: 0.8rem; color: var(--text-dim);"><%= prompt.evaluations.count %> evaluations</span>
+      <% end %>
+    <% end %>
+  </div>
+</div>

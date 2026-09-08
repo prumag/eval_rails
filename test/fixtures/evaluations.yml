@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  prompt: one
+  winner_response: one
+  accuracy_score: 1
+  clarity_score: 1
+  instruction_score: 1
+  feedback_notes: MyText
+  evaluator_name: MyString
+
+two:
+  prompt: two
+  winner_response: two
+  accuracy_score: 1
+  clarity_score: 1
+  instruction_score: 1
+  feedback_notes: MyText
+  evaluator_name: MyString

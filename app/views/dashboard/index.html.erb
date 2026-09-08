@@ -1,0 +1,90 @@
+<div class="hero-banner">
+  <h1 class="hero-title">Model Leaderboard & Analytics</h1>
+  <p class="hero-subtitle">
+    Live win-rate rankings, quality metrics, and evaluation metrics computed from human blind-tests.
+  </p>
+</div>
+
+<!-- Summary Metric Cards -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2.5rem;" id="dashboard-metric-cards">
+  <div class="glass-card" style="text-align: center; padding: 1.25rem; margin-bottom: 0;">
+    <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary);" id="metric-evaluations"><%= @total_evaluations %></div>
+    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Evaluations Recorded</div>
+  </div>
+
+  <div class="glass-card" style="text-align: center; padding: 1.25rem; margin-bottom: 0;">
+    <div style="font-size: 2.2rem; font-weight: 800; color: var(--accent-cyan);" id="metric-models"><%= @models.count %></div>
+    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Models Benchmarkable</div>
+  </div>
+
+  <div class="glass-card" style="text-align: center; padding: 1.25rem; margin-bottom: 0;">
+    <div style="font-size: 2.2rem; font-weight: 800; color: var(--accent-emerald);" id="metric-prompts"><%= @total_prompts %></div>
+    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Test Prompts Created</div>
+  </div>
+
+  <div class="glass-card" style="text-align: center; padding: 1.25rem; margin-bottom: 0;">
+    <div style="font-size: 2.2rem; font-weight: 800; color: var(--accent-amber);" id="metric-responses"><%= @total_responses %></div>
+    <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Model Outputs Generated</div>
+  </div>
+</div>
+
+<!-- Leaderboard Table -->
+<div class="glass-card" id="leaderboard-card">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+    <h3 style="font-size: 1.25rem; font-weight: 700;">AI Model Win-Rate Rankings</h3>
+    <%= link_to "Download Benchmark Dataset (JSON)", api_evaluations_path, class: "btn-secondary", style: "font-size: 0.8rem;", target: "_blank", id: "btn-json-export" %>
+  </div>
+
+  <table class="leaderboard-table" id="table-leaderboard">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Model Name & Config</th>
+        <th>Provider</th>
+        <th>Win Rate</th>
+        <th>Total Matches</th>
+        <th>Avg Accuracy</th>
+        <th>Avg Clarity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @models.each_with_index do |model, idx| %>
+        <tr id="row-model-<%= model.id %>">
+          <td style="font-weight: 800; color: var(--text-muted);">#<%= idx + 1 %></td>
+          <td style="font-weight: 700; color: var(--text-main);"><%= model.name %></td>
+          <td><span class="model-tag tag-a" style="font-size: 0.75rem;"><%= model.provider %></span></td>
+          <td><span class="win-rate-pill"><%= model.win_rate %>%</span></td>
+          <td style="font-family: var(--font-mono);"><%= model.total_evaluations %></td>
+          <td style="font-weight: 600; color: var(--accent-amber);"><%= model.average_accuracy %> / 5.0</td>
+          <td style="font-weight: 600; color: var(--accent-cyan);"><%= model.average_clarity %> / 5.0</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Recent Evaluation History Log -->
+<div class="glass-card" id="recent-evaluations-card">
+  <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">Recent Evaluation Log</h3>
+  
+  <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+    <% @recent_evaluations.each do |eval| %>
+      <div style="background: rgba(0,0,0,0.25); padding: 1rem 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--bg-card-border);" id="eval-log-<%= eval.id %>">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+          <span style="font-weight: 600; font-size: 0.95rem;">"<%= eval.prompt.body.truncate(65) %>"</span>
+          <span style="font-size: 0.8rem; color: var(--text-dim);"><%= time_ago_in_words(eval.created_at) %> ago</span>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: center; font-size: 0.85rem; color: var(--text-muted);">
+          <span>Winner: <strong style="color: var(--accent-emerald);"><%= eval.is_tie ? "Tie" : eval.winner_response&.model_config&.name %></strong></span>
+          <span>&bull;</span>
+          <span>Evaluator: <strong><%= eval.evaluator_name %></strong></span>
+          <% if eval.feedback_notes.present? %>
+            <span>&bull;</span>
+            <span style="font-style: italic; color: var(--text-main);">"<%= eval.feedback_notes.truncate(50) %>"</span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
