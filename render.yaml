@@ -4,8 +4,6 @@ services:
     env: docker
     plan: free
     region: oregon
-    buildCommand: ./bin/rails assets:precompile && ./bin/rails db:migrate && ./bin/rails db:seed
-    startCommand: ./bin/rails server -b 0.0.0.0
     envVars:
       - key: RAILS_ENV
         value: production
