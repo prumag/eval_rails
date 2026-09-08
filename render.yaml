@@ -9,5 +9,7 @@ services:
         value: production
       - key: RAILS_LOG_TO_STDOUT
         value: true
+      - key: SECRET_KEY_BASE
+        generateValue: true
       - key: GEMINI_API_KEY
         sync: false
