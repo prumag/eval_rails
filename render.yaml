@@ -1,9 +1,11 @@
 services:
   - type: web
     name: eval-rails
-    env: docker
+    env: ruby
     plan: free
     region: oregon
+    buildCommand: bundle install && bundle exec rails assets:precompile && bundle exec rails db:prepare
+    startCommand: bundle exec puma -C config/puma.rb
     envVars:
       - key: RAILS_ENV
         value: production
