@@ -1,0 +1,19 @@
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20260908-7970-uq2i3d sitelibdir\=./.gem.20260908-7970-uq2i3d clean
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20260908-7970-uq2i3d sitelibdir\=./.gem.20260908-7970-uq2i3d
+compiling cruby.c
+linking shared-object skiptrace/internal/cruby.bundle
+ld: warning: search path '/opt/homebrew/Cellar/openssl@3/3.6.3/lib' not found
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20260908-7970-uq2i3d sitelibdir\=./.gem.20260908-7970-uq2i3d install
+/usr/bin/install -c -m 0755 cruby.bundle ./.gem.20260908-7970-uq2i3d/skiptrace/internal
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bindex-0.8.1/ext/skiptrace
+make DESTDIR\= sitearchdir\=./.gem.20260908-7970-uq2i3d sitelibdir\=./.gem.20260908-7970-uq2i3d clean

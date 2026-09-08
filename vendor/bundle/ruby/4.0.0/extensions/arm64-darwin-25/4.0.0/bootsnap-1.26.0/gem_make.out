@@ -1,0 +1,24 @@
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bootsnap-1.26.0/ext/bootsnap
+/opt/homebrew/opt/ruby/bin/ruby extconf.rb
+checking for fdatasync() in unistd.h... yes
+checking for fstatat() in sys/stat.h... yes
+checking for whether -D_GNU_SOURCE is accepted as CPPFLAGS... yes
+checking for whether -O3 is accepted as CFLAGS... yes
+checking for whether -std=c99 is accepted as CFLAGS... yes
+creating Makefile
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bootsnap-1.26.0/ext/bootsnap
+make -j3 DESTDIR\= sitearchdir\=./.gem.20260908-7970-485uax sitelibdir\=./.gem.20260908-7970-485uax clean
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bootsnap-1.26.0/ext/bootsnap
+make -j3 DESTDIR\= sitearchdir\=./.gem.20260908-7970-485uax sitelibdir\=./.gem.20260908-7970-485uax
+compiling bootsnap.c
+linking shared-object bootsnap/bootsnap.bundle
+ld: warning: search path '/opt/homebrew/Cellar/openssl@3/3.6.3/lib' not found
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bootsnap-1.26.0/ext/bootsnap
+make -j3 DESTDIR\= sitearchdir\=./.gem.20260908-7970-485uax sitelibdir\=./.gem.20260908-7970-485uax install
+/usr/bin/install -c -m 0755 bootsnap.bundle ./.gem.20260908-7970-485uax/bootsnap
+
+current directory: /Users/prudhvimaguluru/Documents/eval_rails/vendor/bundle/ruby/4.0.0/gems/bootsnap-1.26.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20260908-7970-485uax sitelibdir\=./.gem.20260908-7970-485uax clean
